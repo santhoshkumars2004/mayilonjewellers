@@ -6,7 +6,6 @@ import {
     TrendingUp,
     Package,
     FileText,
-    IndianRupee,
     Wallet,
     Settings,
     Menu,
@@ -19,7 +18,7 @@ const navItems = [
     { to: '/purchase', icon: TrendingUp, label: 'Purchase' },
     { to: '/stock', icon: Package, label: 'Inventory' },
     { to: '/billing', icon: FileText, label: 'Billing' },
-    { to: '/accounts', icon: IndianRupee, label: 'Accounts' },
+
     { to: '/expenses', icon: Wallet, label: 'Expenses' },
     { to: '/settings', icon: Settings, label: 'Settings' },
 ];
