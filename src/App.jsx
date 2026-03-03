@@ -9,7 +9,8 @@ import {
   Stock,
   Billing,
   Accounts,
-  Settings
+  Settings,
+  Expenses
 } from './pages';
 
 function App() {
@@ -28,6 +29,7 @@ function App() {
           <Route path="/billing" element={<Billing />} />
           <Route path="/accounts" element={<Accounts />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/expenses" element={<Expenses />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

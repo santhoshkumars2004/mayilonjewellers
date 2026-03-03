@@ -6,6 +6,7 @@ import SalesPage from './Sales';
 import AccountsPage from './Accounts';
 import BillingPage from './Billing';
 import DashboardPage from './Dashboard';
+import ExpensesPage from './Expenses';
 
 // Export Real Components
 export const Settings = SettingsPage;
@@ -15,3 +16,4 @@ export const Sales = SalesPage;
 export const Accounts = AccountsPage;
 export const Billing = BillingPage;
 export const Dashboard = DashboardPage;
+export const Expenses = ExpensesPage;
