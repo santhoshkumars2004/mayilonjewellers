@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import InstallPrompt from '../common/InstallPrompt';
 import {
     LayoutDashboard,
     ShoppingCart,
@@ -123,6 +124,9 @@ const AppLayout = () => {
                     <Outlet />
                 </main>
             </div>
+
+            {/* ===== PWA Install Prompt ===== */}
+            <InstallPrompt />
         </>
     );
 };
