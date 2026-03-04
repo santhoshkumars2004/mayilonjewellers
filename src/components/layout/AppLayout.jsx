@@ -11,6 +11,7 @@ import {
     Settings,
     Menu,
     X,
+    Users,
 } from 'lucide-react';
 
 const navItems = [
@@ -21,6 +22,7 @@ const navItems = [
     { to: '/billing', icon: FileText, label: 'Billing' },
 
     { to: '/expenses', icon: Wallet, label: 'Expenses' },
+    { to: '/dealers', icon: Users, label: 'Dealers' },
     { to: '/settings', icon: Settings, label: 'Settings' },
 ];
 

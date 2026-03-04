@@ -8,8 +8,10 @@ import {
   Purchase,
   Stock,
   Billing,
+  Accounts,
   Settings,
-  Expenses
+  Expenses,
+  Dealers
 } from './pages';
 
 function App() {
@@ -26,9 +28,10 @@ function App() {
           <Route path="/purchase" element={<Purchase />} />
           <Route path="/stock" element={<Stock />} />
           <Route path="/billing" element={<Billing />} />
-
+          <Route path="/accounts" element={<Accounts />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/expenses" element={<Expenses />} />
+          <Route path="/dealers" element={<Dealers />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

@@ -10,8 +10,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
       manifest: {
-        name: 'Mayilon Jewellers - Management System',
-        short_name: 'Mayilon',
+        name: 'Mayilon Jewellers',
+        short_name: 'Mayilon Jewellers',
         description: 'Complete jewelry shop management system for sales, inventory, billing, and accounts',
         theme_color: '#F59E0B',
         background_color: '#1F2937',

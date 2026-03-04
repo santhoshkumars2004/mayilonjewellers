@@ -1892,8 +1892,370 @@ tbody tr:last-child td {
 }
 
 /* ========================================
+   DEALERS PAGE — TABLE LAYOUT
+   ======================================== */
+
+/* ── Summary Bar ── */
+.dealers-summary-bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-5);
+  background: white;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: var(--space-5);
+}
+
+.dealers-summary-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dealers-summary-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gray-500);
+  font-weight: 600;
+}
+
+.dealers-summary-value {
+  font-size: 1.3rem;
+  color: var(--gray-800);
+}
+
+.dealers-summary-value--gold {
+  color: #92400e;
+}
+
+.dealers-summary-divider {
+  width: 1px;
+  height: 40px;
+  background: var(--gray-200);
+}
+
+/* ── Form Row ── */
+.dealers-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+/* ── Main Table ── */
+.dealers-table-wrapper {
+  background: white;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--gray-200);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.dealers-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+}
+
+.dealers-table thead th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  background: var(--gray-50);
+  color: var(--gray-600);
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 2px solid var(--gray-200);
+  white-space: nowrap;
+}
+
+.dealers-table tbody td {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.dealers-row {
+  transition: background var(--transition-fast);
+}
+
+.dealers-row:hover {
+  background: var(--gray-50);
+}
+
+.dealers-row--expanded {
+  background: #fefce8;
+}
+
+.dealers-cell--sno {
+  color: var(--gray-400);
+  font-weight: 600;
+  width: 48px;
+}
+
+.dealers-cell--name strong {
+  color: var(--gray-800);
+  font-size: 0.9rem;
+}
+
+.dealers-col--in,
+.dealers-cell--in {
+  color: #166534;
+}
+
+.dealers-col--out,
+.dealers-cell--out {
+  color: #991b1b;
+}
+
+.dealers-col--balance,
+.dealers-cell--balance {
+  color: #92400e;
+  font-size: 0.95rem;
+}
+
+.dealers-cell--negative {
+  color: #dc2626 !important;
+}
+
+/* ── Action Buttons (table row) ── */
+.dealers-cell--actions {
+  display: flex;
+  gap: var(--space-1);
+  white-space: nowrap;
+}
+
+.dealers-tbl-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--gray-200);
+  background: white;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.dealers-tbl-btn--in {
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.dealers-tbl-btn--in:hover {
+  background: #f0fdf4;
+  border-color: #86efac;
+}
+
+.dealers-tbl-btn--out {
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.dealers-tbl-btn--out:hover {
+  background: #fffbeb;
+  border-color: #fcd34d;
+}
+
+.dealers-tbl-btn--history {
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.dealers-tbl-btn--history:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.dealers-tbl-btn--delete {
+  color: var(--gray-400);
+  border-color: var(--gray-200);
+}
+
+.dealers-tbl-btn--delete:hover {
+  color: #dc2626;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+/* ── Pure Gold Calculation Banner (modal) ── */
+.dealers-pure-calc {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: linear-gradient(135deg, #fef9c3, #fef3c7);
+  border: 1px solid #fcd34d;
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  color: #92400e;
+}
+
+.dealers-pure-calc strong {
+  font-size: 1.1rem;
+  color: #78350f;
+}
+
+.dealers-pure-calc small {
+  color: #a16207;
+  font-size: 0.75rem;
+}
+
+/* ── Expanded Transaction History ── */
+.dealers-history-row td {
+  padding: 0 !important;
+  background: #fefce8;
+  border-bottom: 2px solid var(--gold-200);
+}
+
+.dealers-history-panel {
+  padding: var(--space-4) var(--space-5);
+  animation: fadeIn 0.2s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dealers-history-panel {
+    animation: none;
+  }
+}
+
+.dealers-history-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gray-700);
+  margin: 0 0 var(--space-3);
+}
+
+.dealers-history-empty {
+  color: var(--gray-500);
+  font-size: 0.82rem;
+}
+
+.dealers-history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+  background: white;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.dealers-history-table thead th {
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  background: var(--gray-100);
+  color: var(--gray-600);
+  font-weight: 600;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.dealers-history-table tbody td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--gray-100);
+  vertical-align: middle;
+}
+
+.dealers-cell--note {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--gray-500);
+}
+
+/* ── Type badges ── */
+.dealers-txn-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: var(--radius-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.dealers-txn-badge--received {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.dealers-txn-badge--used {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.dealers-txn--in td:first-child {
+  border-left: 3px solid #86efac;
+}
+
+.dealers-txn--out td:first-child {
+  border-left: 3px solid #fca5a5;
+}
+
+/* ── Totals footer ── */
+.dealers-totals-row {
+  background: var(--gray-50);
+  border-top: 2px solid var(--gray-300);
+}
+
+.dealers-totals-row td {
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.88rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .dealers-table-wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dealers-table {
+    min-width: 720px;
+  }
+
+  .dealers-summary-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .dealers-summary-divider {
+    width: 100%;
+    height: 1px;
+  }
+
+  .dealers-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* ========================================
    PWA INSTALL BANNER
    ======================================== */
+
+
+
 .install-banner {
   position: fixed;
   bottom: 0;
