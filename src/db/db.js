@@ -12,6 +12,21 @@ db.version(1).stores({
   settings: 'key' // key-value store for app settings
 });
 
+// Version 2: Add expenses tracking & balance stores
+db.version(2).stores({
+  sales: '++id, invoiceNo, date, customerName, paymentStatus',
+  purchases: '++id, purchaseId, type, date, supplierName',
+  stock: '++id, [metalType+purity+category], metalType, purity, category',
+  transactions: '++id, date, type, category',
+  customers: '++id, phone, name',
+  suppliers: '++id, phone, name',
+  settings: 'key',
+  expenses: '++id, date, name, reason',       // daily shop expenses
+  balances: 'key',                              // shop & bank balance key-value store
+  dealers: '++id, name, phone',                 // dealer accounts
+  dealerTransactions: '++id, dealerId, date, type' // dealer gold in/out
+});
+
 // Seed initial settings if needed
 db.on('populate', () => {
   db.settings.bulkAdd([
