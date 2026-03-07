@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Outlet, useLocation } from 'react-router-dom';
 import InstallPrompt from '../common/InstallPrompt';
+import { useAuth } from '../../context/AuthContext';
 import {
     LayoutDashboard,
     ShoppingCart,
@@ -12,6 +13,7 @@ import {
     Menu,
     X,
     Users,
+    LogOut,
 } from 'lucide-react';
 
 const navItems = [
@@ -29,6 +31,7 @@ const navItems = [
 const AppLayout = () => {
     const [menuOpen, setMenuOpen] = useState(false);
     const location = useLocation();
+    const { logout, user } = useAuth();
 
     // Close mobile menu on route change
     useEffect(() => {
@@ -79,15 +82,37 @@ const AppLayout = () => {
                         ))}
                     </ul>
 
-                    {/* Mobile Hamburger */}
-                    <button
-                        className="navbar-hamburger"
-                        onClick={() => setMenuOpen(!menuOpen)}
-                        aria-label={menuOpen ? 'Close menu' : 'Open menu'}
-                        aria-expanded={menuOpen}
-                    >
-                        {menuOpen ? <X size={24} /> : <Menu size={24} />}
-                    </button>
+                    {/* Mobile Hamburger + Logout */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <button
+                            onClick={logout}
+                            title={`Sign out (${user?.email})`}
+                            style={{
+                                background: 'rgba(239,68,68,0.1)',
+                                border: '1px solid rgba(239,68,68,0.3)',
+                                borderRadius: '8px',
+                                padding: '7px 10px',
+                                cursor: 'pointer',
+                                color: '#ef4444',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '6px',
+                                fontSize: '0.8rem',
+                                fontWeight: 600,
+                            }}
+                        >
+                            <LogOut size={15} />
+                            <span className="navbar-logout-label">Sign out</span>
+                        </button>
+                        <button
+                            className="navbar-hamburger"
+                            onClick={() => setMenuOpen(!menuOpen)}
+                            aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+                            aria-expanded={menuOpen}
+                        >
+                            {menuOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    </div>
                 </nav>
             </header>
 
@@ -116,6 +141,17 @@ const AppLayout = () => {
                                 </NavLink>
                             </li>
                         ))}
+                        {/* Logout in mobile menu */}
+                        <li className="mobile-menu-item" style={{ animationDelay: `${navItems.length * 0.05}s` }}>
+                            <button
+                                onClick={logout}
+                                className="mobile-menu-link"
+                                style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', color: '#ef4444' }}
+                            >
+                                <LogOut size={22} />
+                                <span>Sign Out</span>
+                            </button>
+                        </li>
                     </ul>
                 </nav>
             </div>

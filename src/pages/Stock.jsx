@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { db } from '../db/db';
 import { useShop } from '../context/ShopContext';
 import { Card, Button, StatCard, PageHeader, Badge } from '../components/common/UI';
@@ -11,7 +11,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Stock = () => {
     const { formatCurrency, settings } = useShop();
-    const stock = useLiveQuery(() => db.stock.toArray(), []);
+    const stock = useCollection('stock');
 
     const goldStock = stock?.filter(s => s.metalType === 'Gold') || [];
     const silverStock = stock?.filter(s => s.metalType === 'Silver') || [];

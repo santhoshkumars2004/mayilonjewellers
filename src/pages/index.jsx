@@ -8,6 +8,7 @@ import BillingPage from './Billing';
 import DashboardPage from './Dashboard';
 import ExpensesPage from './Expenses';
 import DealersPage from './Dealers';
+import DealerLedgerPage from './DealerLedger';
 
 // Export Real Components
 export const Settings = SettingsPage;
@@ -19,3 +20,4 @@ export const Billing = BillingPage;
 export const Dashboard = DashboardPage;
 export const Expenses = ExpensesPage;
 export const Dealers = DealersPage;
+export const DealerLedger = DealerLedgerPage;

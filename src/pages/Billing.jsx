@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../db/db';
 import { useShop } from '../context/ShopContext';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { Card, Button, PageHeader } from '../components/common/UI';
 import { Search, Download } from 'lucide-react';
 import { jsPDF } from 'jspdf';
@@ -11,7 +11,7 @@ const Billing = () => {
     const { formatCurrency, formatDate, settings } = useShop();
     const [searchTerm, setSearchTerm] = useState('');
 
-    const allSales = useLiveQuery(() => db.sales.orderBy('date').reverse().toArray(), []);
+    const allSales = useCollection('sales', 'date', 'desc');
 
     const filteredSales = allSales?.filter(s =>
         s.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||

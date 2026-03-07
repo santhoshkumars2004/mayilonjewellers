@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { db } from '../db/db';
 import { useShop } from '../context/ShopContext';
 import { Button, Card, StatCard, PageHeader } from '../components/common/UI';
@@ -13,9 +13,9 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const Dashboard = () => {
     const { formatCurrency, settings } = useShop();
 
-    const sales = useLiveQuery(() => db.sales.toArray(), []);
-    const purchases = useLiveQuery(() => db.purchases.toArray(), []);
-    const stock = useLiveQuery(() => db.stock.toArray(), []);
+    const sales = useCollection('sales');
+    const purchases = useCollection('purchases');
+    const stock = useCollection('stock');
 
     const today = new Date().toISOString().split('T')[0];
     const todaySales = sales?.filter(s => s.date.startsWith(today)) || [];

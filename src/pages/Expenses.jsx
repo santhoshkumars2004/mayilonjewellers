@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../db/db';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { useShop } from '../context/ShopContext';
 import { Card, Button, PageHeader } from '../components/common/UI';
 import { Plus, X, Store, Landmark, Wallet, Pencil, Check, Trash2, Calendar, User, FileText, IndianRupee, Download, FileSpreadsheet, FileDown } from 'lucide-react';
@@ -178,9 +178,9 @@ const Expenses = () => {
     const [showModal, setShowModal] = useState(false);
 
     // Live queries
-    const balancesArr = useLiveQuery(() => db.balances.toArray(), []);
-    const expenses = useLiveQuery(() => db.expenses.orderBy('date').reverse().toArray(), []);
-    const allExpenses = useLiveQuery(() => db.expenses.toArray(), []);
+    const balancesArr = useCollection('balances');
+    const expenses = useCollection('expenses', 'date', 'desc');
+    const allExpenses = useCollection('expenses');
 
     // Ensure balance records exist in DB (handles already-upgraded DBs)
     useEffect(() => {

@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { db } from '../db/db';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { useShop } from '../context/ShopContext';
+import { useNavigate } from 'react-router-dom';
 import { PageHeader, Button } from '../components/common/UI';
-import { Plus, X, ArrowDownLeft, ArrowUpRight, ChevronDown, ChevronUp, Trash2, User, Phone, IndianRupee, Percent, Scale, Calendar, FileText } from 'lucide-react';
+import { Plus, X, ArrowDownLeft, ArrowUpRight, ChevronDown, ChevronUp, Trash2, User, Phone, IndianRupee, Percent, Scale, Calendar, FileText, FileText as LedgerIcon } from 'lucide-react';
 
 /* ═══════════════════════════════════════════
    ADD DEALER MODAL
@@ -156,13 +157,14 @@ const GoldModal = ({ dealer, type, onClose }) => {
    ═══════════════════════════════════════════ */
 const Dealers = () => {
     const { formatCurrency } = useShop();
+    const navigate = useNavigate();
     const [showAddModal, setShowAddModal] = useState(false);
     const [goldModal, setGoldModal] = useState(null);
     const [expandedId, setExpandedId] = useState(null);
 
     // Live queries
-    const dealers = useLiveQuery(() => db.dealers.toArray(), []);
-    const allTxns = useLiveQuery(() => db.dealerTransactions.toArray(), []);
+    const dealers = useCollection('dealers');
+    const allTxns = useCollection('dealerTransactions');
 
     const txnsFor = (id) => (allTxns || []).filter(t => t.dealerId === id);
 
@@ -265,7 +267,14 @@ const Dealers = () => {
                                 {/* ── Main Row ── */}
                                 <tr className={`dealers-row ${expandedId === row.id ? 'dealers-row--expanded' : ''}`}>
                                     <td className="dealers-cell--sno">{idx + 1}</td>
-                                    <td className="dealers-cell--name"><strong>{row.name}</strong></td>
+                                    <td className="dealers-cell--name">
+                                        <button
+                                            onClick={() => navigate(`/dealers/${row.id}`)}
+                                            style={{ background: 'none', border: 'none', color: 'var(--brand-primary)', fontWeight: 'bold', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                                        >
+                                            {row.name}
+                                        </button>
+                                    </td>
                                     <td>{row.phone || '—'}</td>
                                     <td>{row.displayRate ? `₹${Number(row.displayRate).toLocaleString('en-IN')}` : '—'}</td>
                                     <td>{row.displayPurity !== '—' ? `${row.displayPurity}%` : '—'}</td>
@@ -277,78 +286,20 @@ const Dealers = () => {
                                     <td>
                                         <div className="dealers-cell--actions">
                                             <button className="dealers-tbl-btn dealers-tbl-btn--in" title="Gold In" onClick={() => setGoldModal({ dealer: row, type: 'in' })}>
-                                                <ArrowDownLeft size={14} />
+                                                <ArrowDownLeft size={14} /> In
                                             </button>
                                             <button className="dealers-tbl-btn dealers-tbl-btn--out" title="Gold Out" onClick={() => setGoldModal({ dealer: row, type: 'out' })}>
-                                                <ArrowUpRight size={14} />
+                                                <ArrowUpRight size={14} /> Out
                                             </button>
-                                            <button className="dealers-tbl-btn dealers-tbl-btn--history" title="History" onClick={() => setExpandedId(expandedId === row.id ? null : row.id)}>
-                                                {expandedId === row.id ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                                            <button className="dealers-tbl-btn dealers-tbl-btn--ledger" title="Open Ledger" onClick={() => navigate(`/dealers/${row.id}`)}>
+                                                <LedgerIcon size={14} /> Ledger
                                             </button>
-                                            <button className="dealers-tbl-btn dealers-tbl-btn--delete" title="Delete" onClick={() => deleteDealer(row.id)}>
+                                            <button className="dealers-tbl-btn dealers-tbl-btn--delete dealers-tbl-btn--icon-only" title="Delete" onClick={() => deleteDealer(row.id)}>
                                                 <Trash2 size={14} />
                                             </button>
                                         </div>
                                     </td>
                                 </tr>
-
-                                {/* ── Expanded History ── */}
-                                {expandedId === row.id && (() => {
-                                    const balMap = runningBalances(row.txns);
-                                    return (
-                                        <tr className="dealers-history-row">
-                                            <td colSpan="9">
-                                                <div className="dealers-history-panel">
-                                                    <p className="dealers-history-title">Transaction History — {row.name}</p>
-                                                    {row.txns.length === 0 ? (
-                                                        <p className="dealers-history-empty">No transactions yet.</p>
-                                                    ) : (
-                                                        <table className="dealers-history-table">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>#</th>
-                                                                    <th>Date</th>
-                                                                    <th>Type</th>
-                                                                    <th>Weight (g)</th>
-                                                                    <th>Purity (%)</th>
-                                                                    <th>Pure (g)</th>
-                                                                    <th>Rate (₹)</th>
-                                                                    <th>Note</th>
-                                                                    <th>Running Bal.</th>
-                                                                    <th></th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                {row.txns.map((txn, i) => (
-                                                                    <tr key={txn.id} className={txn.type === 'received' ? 'dealers-txn--in' : 'dealers-txn--out'}>
-                                                                        <td>{row.txns.length - i}</td>
-                                                                        <td>{fmtDate(txn.date)}</td>
-                                                                        <td>
-                                                                            <span className={`dealers-txn-badge dealers-txn-badge--${txn.type}`}>
-                                                                                {txn.type === 'received' ? '⬇ In' : '⬆ Out'}
-                                                                            </span>
-                                                                        </td>
-                                                                        <td>{(txn.weight || 0).toFixed(3)}</td>
-                                                                        <td>{txn.purity}%</td>
-                                                                        <td><strong>{purify(txn).toFixed(3)}</strong></td>
-                                                                        <td>{txn.rate ? `₹${Number(txn.rate).toLocaleString('en-IN')}` : '—'}</td>
-                                                                        <td className="dealers-cell--note">{txn.note || '—'}</td>
-                                                                        <td><strong>{balMap[txn.id]?.toFixed(3)}</strong></td>
-                                                                        <td>
-                                                                            <button className="dealers-tbl-btn dealers-tbl-btn--delete" title="Delete" onClick={() => deleteTxn(txn.id)}>
-                                                                                <Trash2 size={12} />
-                                                                            </button>
-                                                                        </td>
-                                                                    </tr>
-                                                                ))}
-                                                            </tbody>
-                                                        </table>
-                                                    )}
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    );
-                                })()}
                             </React.Fragment>
                         )) : (
                             <tr>

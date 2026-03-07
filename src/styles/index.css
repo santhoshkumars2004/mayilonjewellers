@@ -1951,6 +1951,7 @@ tbody tr:last-child td {
   border: 1px solid var(--gray-200);
   box-shadow: var(--shadow-sm);
   overflow: hidden;
+  /* Prevent scrolling so it fits */
 }
 
 .dealers-table {
@@ -1961,7 +1962,7 @@ tbody tr:last-child td {
 
 .dealers-table thead th {
   text-align: left;
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-2);
   background: var(--gray-50);
   color: var(--gray-600);
   font-weight: 700;
@@ -1969,13 +1970,17 @@ tbody tr:last-child td {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   border-bottom: 2px solid var(--gray-200);
-  white-space: nowrap;
+  white-space: normal;
+  /* Allow wrapping */
+  line-height: 1.2;
 }
 
 .dealers-table tbody td {
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-2);
   border-bottom: 1px solid var(--gray-100);
   vertical-align: middle;
+  white-space: normal;
+  /* Allow wrapping */
 }
 
 .dealers-row {
@@ -2032,13 +2037,17 @@ tbody tr:last-child td {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
+  gap: 4px;
   height: 30px;
+  padding: 0 8px;
   border-radius: var(--radius-md);
   border: 1.5px solid var(--gray-200);
   background: white;
   cursor: pointer;
   transition: all var(--transition-fast);
+  font-weight: 600;
+  font-size: 0.7rem;
+  white-space: nowrap;
 }
 
 .dealers-tbl-btn--in {
@@ -2061,12 +2070,12 @@ tbody tr:last-child td {
   border-color: #fcd34d;
 }
 
-.dealers-tbl-btn--history {
+.dealers-tbl-btn--ledger {
   color: #1e40af;
   border-color: #bfdbfe;
 }
 
-.dealers-tbl-btn--history:hover {
+.dealers-tbl-btn--ledger:hover {
   background: #eff6ff;
   border-color: #93c5fd;
 }
@@ -2080,6 +2089,12 @@ tbody tr:last-child td {
   color: #dc2626;
   background: #fef2f2;
   border-color: #fecaca;
+}
+
+/* Make delete icon-only if side-by-side with text buttons */
+.dealers-tbl-btn--icon-only {
+  width: 32px;
+  padding: 0;
 }
 
 /* ── Pure Gold Calculation Banner (modal) ── */

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { db } from '../db/db';
 import { useShop } from '../context/ShopContext';
-import { useLiveQuery } from 'dexie-react-hooks';
+import { useCollection } from '../hooks/useCollection';
 import { Button, Input, Select, Card, PageHeader, Badge } from '../components/common/UI';
 import { Plus, Trash, Save, X, ChevronLeft } from 'lucide-react';
 
@@ -180,7 +180,7 @@ const NewSaleForm = ({ onCancel, onSave, settings, formatCurrency }) => {
 const Sales = () => {
     const { formatCurrency, formatDate, settings } = useShop();
     const [isNewSale, setIsNewSale] = useState(false);
-    const sales = useLiveQuery(() => db.sales.orderBy('date').reverse().toArray(), []);
+    const sales = useCollection('sales', 'date', 'desc');
 
     if (isNewSale) return <NewSaleForm onCancel={() => setIsNewSale(false)} onSave={() => setIsNewSale(false)} settings={settings} formatCurrency={formatCurrency} />;
 
