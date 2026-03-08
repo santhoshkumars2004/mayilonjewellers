@@ -205,21 +205,21 @@ const DealerLedger = () => {
 
                             return (
                                 <tr key={txn.id} className={txn.type === 'received' ? 'dealers-txn--in' : 'dealers-txn--out'}>
-                                    <td>{fmtDate(txn.date)}</td>
-                                    <td className="dealers-cell--note"><strong>{txn.note || (txn.type === 'received' ? 'Recv' : 'Paid')}</strong></td>
-                                    <td style={{ color: '#9ca3af', fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                                    <td data-label="Date">{fmtDate(txn.date)}</td>
+                                    <td className="dealers-cell--note" data-label="Particulars"><strong>{txn.note || (txn.type === 'received' ? 'Recv' : 'Paid')}</strong></td>
+                                    <td style={{ color: '#9ca3af', fontFamily: 'monospace', fontSize: '0.85rem' }} data-label="Formula / Calculation">
                                         {formulaStr}
                                     </td>
-                                    <td className="dealers-cell--in">
+                                    <td className="dealers-cell--in" data-label="Gold In (Credit)">
                                         {txn.type === 'received' ? <strong>{pure.toFixed(3)}</strong> : '—'}
                                     </td>
-                                    <td className="dealers-cell--out">
+                                    <td className="dealers-cell--out" data-label="Gold Out (Debit)">
                                         {txn.type === 'used' ? <strong>{pure.toFixed(3)}</strong> : '—'}
                                     </td>
-                                    <td className="dealers-cell--balance">
+                                    <td className="dealers-cell--balance" data-label="Balance (P)">
                                         <strong>{balanceMap[txn.id]?.toFixed(3)}</strong>
                                     </td>
-                                    <td>
+                                    <td data-label="Actions">
                                         <button className="dealers-tbl-btn dealers-tbl-btn--delete" title="Delete" onClick={() => deleteTxn(txn.id)}>
                                             <Trash2 size={14} />
                                         </button>

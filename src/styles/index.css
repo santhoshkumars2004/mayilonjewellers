@@ -2229,12 +2229,92 @@ tbody tr:last-child td {
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .dealers-table-wrapper {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow-x: hidden;
   }
 
-  .dealers-table {
-    min-width: 720px;
+  .dealers-table,
+  .dealers-table thead,
+  .dealers-table tbody,
+  .dealers-table th,
+  .dealers-table td,
+  .dealers-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .dealers-table thead {
+    display: none;
+  }
+
+  .dealers-row,
+  .dealers-txn--in,
+  .dealers-txn--out {
+    margin-bottom: var(--space-4);
+    background: white;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--gray-200);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    position: relative;
+    padding: var(--space-2) 0;
+  }
+
+  .dealers-txn--in td:first-child,
+  .dealers-txn--out td:first-child {
+    border-left: none;
+  }
+
+  .dealers-txn--in {
+    border-left: 4px solid #86efac;
+  }
+
+  .dealers-txn--out {
+    border-left: 4px solid #fca5a5;
+  }
+
+  .dealers-table td {
+    padding: var(--space-2) var(--space-3) !important;
+    padding-left: 45% !important;
+    text-align: right;
+    border-bottom: 1px solid var(--gray-100);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    min-height: 48px;
+  }
+
+  .dealers-table td:last-child {
+    border-bottom: none;
+  }
+
+  .dealers-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: var(--space-3);
+    width: 40%;
+    white-space: nowrap;
+    text-align: left;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .dealers-cell--actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .dealers-table tfoot {
+    display: none;
   }
 
   .dealers-summary-bar {

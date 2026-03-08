@@ -255,8 +255,8 @@ const Dealers = () => {
                             <React.Fragment key={row.id}>
                                 {/* ── Main Row ── */}
                                 <tr className={`dealers-row ${expandedId === row.id ? 'dealers-row--expanded' : ''}`}>
-                                    <td className="dealers-cell--sno">{idx + 1}</td>
-                                    <td className="dealers-cell--name">
+                                    <td className="dealers-cell--sno" data-label="S.No">{idx + 1}</td>
+                                    <td className="dealers-cell--name" data-label="Dealer Name">
                                         <button
                                             onClick={() => navigate(`/dealers/${row.id}`)}
                                             style={{ background: 'none', border: 'none', color: 'var(--brand-primary)', fontWeight: 'bold', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
@@ -264,14 +264,14 @@ const Dealers = () => {
                                             {row.name}
                                         </button>
                                     </td>
-                                    <td>{row.displayRate ? `₹${Number(row.displayRate).toLocaleString('en-IN')}` : '—'}</td>
-                                    <td>{row.displayPurity !== '—' ? `${row.displayPurity}%` : '—'}</td>
-                                    <td className="dealers-cell--in"><strong>{row.totalIn.toFixed(3)}</strong></td>
-                                    <td className="dealers-cell--out"><strong>{row.totalOut.toFixed(3)}</strong></td>
-                                    <td className={`dealers-cell--balance ${row.balance < 0 ? 'dealers-cell--negative' : ''}`}>
+                                    <td data-label="Rate (₹/g)">{row.displayRate ? `₹${Number(row.displayRate).toLocaleString('en-IN')}` : '—'}</td>
+                                    <td data-label="Purity (%)">{row.displayPurity !== '—' ? `${row.displayPurity}%` : '—'}</td>
+                                    <td className="dealers-cell--in" data-label="Gold In (g)"><strong>{row.totalIn.toFixed(3)}</strong></td>
+                                    <td className="dealers-cell--out" data-label="Gold Out (g)"><strong>{row.totalOut.toFixed(3)}</strong></td>
+                                    <td className={`dealers-cell--balance ${row.balance < 0 ? 'dealers-cell--negative' : ''}`} data-label="Pure Balance (g)">
                                         <strong>{row.balance.toFixed(3)}</strong>
                                     </td>
-                                    <td>
+                                    <td data-label="Actions">
                                         <div className="dealers-cell--actions">
                                             <button className="dealers-tbl-btn dealers-tbl-btn--in" title="Gold In" onClick={() => setGoldModal({ dealer: row, type: 'in' })}>
                                                 <ArrowDownLeft size={14} /> In
@@ -291,7 +291,7 @@ const Dealers = () => {
                             </React.Fragment>
                         )) : (
                             <tr>
-                                <td colSpan="9" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
+                                <td colSpan="8" style={{ textAlign: 'center', padding: '48px', color: '#6b7280' }}>
                                     <Scale size={36} style={{ opacity: 0.3, marginBottom: '8px' }} /><br />
                                     No dealers added yet. Click "Add Dealer" to get started.
                                 </td>
