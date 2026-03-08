@@ -39,10 +39,10 @@ const AddDealerModal = ({ onClose }) => {
                         <label htmlFor="dealer-name"><User size={14} /> Dealer Name</label>
                         <input id="dealer-name" value={form.name} onChange={e => up('name', e.target.value)} placeholder="e.g. Santhosh" required />
                     </div>
-                    <div className="expenses-field">
+                    {/* <div className="expenses-field">
                         <label htmlFor="dealer-phone"><Phone size={14} /> Phone (optional)</label>
                         <input id="dealer-phone" value={form.phone} onChange={e => up('phone', e.target.value)} placeholder="e.g. 9876543210" />
-                    </div>
+                    </div> */}
                     <div className="dealers-form-row">
                         <div className="expenses-field">
                             <label htmlFor="dealer-rate"><IndianRupee size={14} /> Default Rate (₹/g)</label>
@@ -127,20 +127,9 @@ const GoldModal = ({ dealer, type, onClose }) => {
                         </div>
                     )}
 
-                    <div className="dealers-form-row">
-                        <div className="expenses-field">
-                            <label htmlFor="g-rate"><IndianRupee size={14} /> Rate (₹/g)</label>
-                            <input id="g-rate" type="number" min="0" value={form.rate} onChange={e => up('rate', e.target.value)} placeholder="e.g. 4000" />
-                        </div>
-                        <div className="expenses-field">
-                            <label htmlFor="g-date"><Calendar size={14} /> Date</label>
-                            <input id="g-date" type="date" value={form.date} onChange={e => up('date', e.target.value)} />
-                        </div>
-                    </div>
-
                     <div className="expenses-field">
-                        <label htmlFor="g-note"><FileText size={14} /> Note (optional)</label>
-                        <input id="g-note" value={form.note} onChange={e => up('note', e.target.value)} placeholder="e.g. Chain lot, Bangle return" />
+                        <label htmlFor="g-date"><Calendar size={14} /> Date</label>
+                        <input id="g-date" type="date" value={form.date} onChange={e => up('date', e.target.value)} />
                     </div>
 
                     <Button type="submit" variant="primary" className="expenses-submit-btn">
@@ -252,7 +241,7 @@ const Dealers = () => {
                         <tr>
                             <th>S.No</th>
                             <th>Dealer Name</th>
-                            <th>Phone</th>
+                            {/* <th>Phone</th> */}
                             <th>Rate (₹/g)</th>
                             <th>Purity (%)</th>
                             <th className="dealers-col--in">Gold In (g)</th>
@@ -275,7 +264,6 @@ const Dealers = () => {
                                             {row.name}
                                         </button>
                                     </td>
-                                    <td>{row.phone || '—'}</td>
                                     <td>{row.displayRate ? `₹${Number(row.displayRate).toLocaleString('en-IN')}` : '—'}</td>
                                     <td>{row.displayPurity !== '—' ? `${row.displayPurity}%` : '—'}</td>
                                     <td className="dealers-cell--in"><strong>{row.totalIn.toFixed(3)}</strong></td>
@@ -311,11 +299,10 @@ const Dealers = () => {
                         )}
                     </tbody>
 
-                    {/* ── Totals Footer ── */}
                     {dealerRows.length > 0 && (
                         <tfoot>
                             <tr className="dealers-totals-row">
-                                <td colSpan="5" style={{ textAlign: 'right' }}><strong>TOTALS</strong></td>
+                                <td colSpan="4" style={{ textAlign: 'right' }}><strong>TOTALS</strong></td>
                                 <td className="dealers-cell--in"><strong>{grandIn.toFixed(3)}</strong></td>
                                 <td className="dealers-cell--out"><strong>{grandOut.toFixed(3)}</strong></td>
                                 <td className="dealers-cell--balance"><strong>{grandBalance.toFixed(3)}</strong></td>

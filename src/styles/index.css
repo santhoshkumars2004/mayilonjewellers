@@ -1417,7 +1417,6 @@ tbody tr:last-child td {
    ======================================== */
 .expenses-page {
   padding: var(--space-5);
-  max-width: 900px;
   margin: 0 auto;
 }
 

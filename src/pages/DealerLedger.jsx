@@ -70,20 +70,9 @@ const LedgerTxnModal = ({ dealer, type, onClose }) => {
                         </div>
                     )}
 
-                    <div className="dealers-form-row">
-                        <div className="expenses-field">
-                            <label htmlFor="g-rate"><IndianRupee size={14} /> Rate (₹/g)</label>
-                            <input id="g-rate" type="number" min="0" value={form.rate} onChange={e => up('rate', e.target.value)} placeholder="4000" />
-                        </div>
-                        <div className="expenses-field">
-                            <label htmlFor="g-date"><Calendar size={14} /> Date</label>
-                            <input id="g-date" type="date" value={form.date} onChange={e => up('date', e.target.value)} />
-                        </div>
-                    </div>
-
                     <div className="expenses-field">
-                        <label htmlFor="g-note"><FileText size={14} /> Particulars (Note)</label>
-                        <input id="g-note" value={form.note} onChange={e => up('note', e.target.value)} placeholder="e.g. Cash 3000, GPay 4000" />
+                        <label htmlFor="g-date"><Calendar size={14} /> Date</label>
+                        <input id="g-date" type="date" value={form.date} onChange={e => up('date', e.target.value)} />
                     </div>
 
                     <Button type="submit" variant="primary" className="expenses-submit-btn">
@@ -110,7 +99,7 @@ const DealerLedger = () => {
     // Fetch Dealer Details
     useEffect(() => {
         const fetchDealer = async () => {
-            const d = await db.dealers.get(Number(id));
+            const d = await db.dealers.get(id);
             if (d) setDealer(d);
             else navigate('/dealers');
         };
@@ -120,7 +109,7 @@ const DealerLedger = () => {
     // Live Transactions for this Dealer
     const allTxns = useCollection('dealerTransactions');
     const txns = (allTxns || [])
-        .filter(t => t.dealerId === Number(id))
+        .filter(t => t.dealerId === id)
         .sort((a, b) => new Date(a.date) - new Date(b.date)); // Chronological order for running balance
 
     if (!dealer) return null;
