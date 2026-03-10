@@ -75,7 +75,6 @@ const EditableBalance = ({ label, icon: Icon, colorClass, value, onSave }) => {
 const AddExpenseModal = ({ onClose }) => {
     const [formData, setFormData] = useState({
         reason: '',
-        name: '',
         amount: '',
         date: new Date().toISOString().split('T')[0],
     });
@@ -85,7 +84,6 @@ const AddExpenseModal = ({ onClose }) => {
         if (!formData.amount || parseFloat(formData.amount) <= 0) return;
         await db.expenses.add({
             reason: formData.reason,
-            name: formData.name,
             amount: parseFloat(formData.amount),
             date: new Date(formData.date).toISOString(),
         });
@@ -119,19 +117,6 @@ const AddExpenseModal = ({ onClose }) => {
                             value={formData.reason}
                             onChange={(e) => update('reason', e.target.value)}
                             placeholder="e.g. Advance, Rent, Material"
-                            required
-                        />
-                    </div>
-
-                    <div className="expenses-field">
-                        <label htmlFor="expense-name">
-                            <User size={14} /> Name
-                        </label>
-                        <input
-                            id="expense-name"
-                            value={formData.name}
-                            onChange={(e) => update('name', e.target.value)}
-                            placeholder="e.g. Raja, Supplier Name"
                             required
                         />
                     </div>
@@ -436,7 +421,7 @@ const Expenses = () => {
                     {expenses?.map((exp) => (
                         <article key={exp.id} className="expenses-history-item">
                             <div className="expenses-history-left">
-                                <p className="expenses-history-name">{exp.name}</p>
+                                {exp.name && <p className="expenses-history-name">{exp.name}</p>}
                                 <p className="expenses-history-reason">{exp.reason}</p>
                                 <time className="expenses-history-date">{formatDate(exp.date)}</time>
                             </div>

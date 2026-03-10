@@ -242,7 +242,6 @@ const Dealers = () => {
                             <th>S.No</th>
                             <th>Dealer Name</th>
                             {/* <th>Phone</th> */}
-                            <th>Rate (₹/g)</th>
                             <th>Purity (%)</th>
                             <th className="dealers-col--in">Gold In (g)</th>
                             <th className="dealers-col--out">Gold Out (g)</th>
@@ -264,7 +263,6 @@ const Dealers = () => {
                                             {row.name}
                                         </button>
                                     </td>
-                                    <td data-label="Rate (₹/g)">{row.displayRate ? `₹${Number(row.displayRate).toLocaleString('en-IN')}` : '—'}</td>
                                     <td data-label="Purity (%)">{row.displayPurity !== '—' ? `${row.displayPurity}%` : '—'}</td>
                                     <td className="dealers-cell--in" data-label="Gold In (g)"><strong>{row.totalIn.toFixed(3)}</strong></td>
                                     <td className="dealers-cell--out" data-label="Gold Out (g)"><strong>{row.totalOut.toFixed(3)}</strong></td>
@@ -302,7 +300,7 @@ const Dealers = () => {
                     {dealerRows.length > 0 && (
                         <tfoot>
                             <tr className="dealers-totals-row">
-                                <td colSpan="4" style={{ textAlign: 'right' }}><strong>TOTALS</strong></td>
+                                <td colSpan="3" style={{ textAlign: 'right' }}><strong>TOTALS</strong></td>
                                 <td className="dealers-cell--in"><strong>{grandIn.toFixed(3)}</strong></td>
                                 <td className="dealers-cell--out"><strong>{grandOut.toFixed(3)}</strong></td>
                                 <td className="dealers-cell--balance"><strong>{grandBalance.toFixed(3)}</strong></td>
