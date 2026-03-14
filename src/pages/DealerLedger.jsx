@@ -13,10 +13,13 @@ const LedgerTxnModal = ({ dealer, type, onClose }) => {
     const isIn = type === 'in';
     const title = isIn ? `⬇ Receive Gold — ${dealer.name}` : `⬆ Send Gold — ${dealer.name}`;
 
+    const [calcType, setCalcType] = useState('weight'); // 'weight' or 'amount'
+
     const [form, setForm] = useState({
         weight: '',
-        rate: String(dealer.defaultRate || ''),
         purity: String(dealer.defaultPurity || '99.90'),
+        amount: '',
+        rate: String(dealer.defaultRate || ''),
         date: new Date().toISOString().split('T')[0],
         note: '',
     });
@@ -24,18 +27,28 @@ const LedgerTxnModal = ({ dealer, type, onClose }) => {
 
     const w = parseFloat(form.weight) || 0;
     const p = parseFloat(form.purity) || 0;
-    const pureWeight = (w * p / 100);
+    const amt = parseFloat(form.amount) || 0;
+    const rt = parseFloat(form.rate) || 0;
+    
+    let pureWeight = 0;
+    if (calcType === 'weight') {
+        pureWeight = (w * p / 100);
+    } else {
+        pureWeight = rt > 0 ? (amt / rt) : 0;
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (w <= 0) return;
+        if (pureWeight <= 0) return;
 
         await db.dealerTransactions.add({
             dealerId: dealer.id,
             type: isIn ? 'received' : 'used',
-            weight: w,
-            rate: parseFloat(form.rate) || 0,
-            purity: p,
+            calcType,
+            weight: calcType === 'weight' ? w : 0,
+            purity: calcType === 'weight' ? p : 0,
+            amount: calcType === 'amount' ? amt : 0,
+            rate: calcType === 'amount' ? rt : 0,
             pureWeight,
             date: form.date ? new Date(form.date).toISOString() : new Date().toISOString(),
             note: form.note.trim(),
@@ -51,24 +64,71 @@ const LedgerTxnModal = ({ dealer, type, onClose }) => {
                     <button className="expenses-modal-close" onClick={onClose} aria-label="Close"><X size={20} /></button>
                 </header>
                 <form onSubmit={handleSubmit} className="expenses-modal-form">
-                    <div className="dealers-form-row">
-                        <div className="expenses-field">
-                            <label htmlFor="g-weight"><Scale size={14} /> Weight (g)</label>
-                            <input id="g-weight" type="number" step="0.001" min="0" value={form.weight} onChange={e => up('weight', e.target.value)} placeholder="0.000" required autoFocus />
-                        </div>
-                        <div className="expenses-field">
-                            <label htmlFor="g-purity"><Percent size={14} /> Purity (%)</label>
-                            <input id="g-purity" type="number" step="0.01" min="0" max="100" value={form.purity} onChange={e => up('purity', e.target.value)} placeholder="99.90" required />
-                        </div>
+                    
+                    {/* Calculation Type Tabs */}
+                    <div style={{ display: 'flex', gap: '8px', marginBottom: '16px', backgroundColor: 'var(--surface-color)', padding: '4px', borderRadius: '8px', border: '1px solid var(--border-color)' }}>
+                        <button 
+                            type="button" 
+                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: 'none', background: calcType === 'weight' ? 'var(--brand-primary)' : 'transparent', color: calcType === 'weight' ? 'white' : 'inherit', cursor: 'pointer', fontWeight: calcType === 'weight' ? 600 : 400, transition: 'all 0.2s' }}
+                            onClick={() => setCalcType('weight')}
+                        >
+                            <Scale size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} /> Weight & Purity
+                        </button>
+                        <button 
+                            type="button" 
+                            style={{ flex: 1, padding: '8px', borderRadius: '6px', border: 'none', background: calcType === 'amount' ? 'var(--brand-primary)' : 'transparent', color: calcType === 'amount' ? 'white' : 'inherit', cursor: 'pointer', fontWeight: calcType === 'amount' ? 600 : 400, transition: 'all 0.2s' }}
+                            onClick={() => setCalcType('amount')}
+                        >
+                            <IndianRupee size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '6px' }} /> Amount & Rate
+                        </button>
                     </div>
 
-                    {w > 0 && (
-                        <div className="dealers-pure-calc">
-                            <span>Pure Gold:</span>
-                            <strong>{pureWeight.toFixed(3)} g</strong>
-                            <small>({form.weight} × {form.purity}%)</small>
-                        </div>
+                    {calcType === 'weight' ? (
+                        <>
+                            <div className="dealers-form-row">
+                                <div className="expenses-field">
+                                    <label htmlFor="g-weight"><Scale size={14} /> Weight (g)</label>
+                                    <input id="g-weight" type="number" step="0.001" min="0" value={form.weight} onChange={e => up('weight', e.target.value)} placeholder="0.000" autoFocus />
+                                </div>
+                                <div className="expenses-field">
+                                    <label htmlFor="g-purity"><Percent size={14} /> Purity (%)</label>
+                                    <input id="g-purity" type="number" step="0.01" min="0" max="100" value={form.purity} onChange={e => up('purity', e.target.value)} placeholder="99.90" />
+                                </div>
+                            </div>
+                            {w > 0 && (
+                                <div className="dealers-pure-calc">
+                                    <span>Pure Gold:</span>
+                                    <strong>{pureWeight.toFixed(3)} g</strong>
+                                    <small>({form.weight} × {form.purity}%)</small>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <>
+                            <div className="dealers-form-row">
+                                <div className="expenses-field">
+                                    <label htmlFor="a-amount"><IndianRupee size={14} /> Amount (₹)</label>
+                                    <input id="a-amount" type="number" step="1" min="0" value={form.amount} onChange={e => up('amount', e.target.value)} placeholder="5000" autoFocus />
+                                </div>
+                                <div className="expenses-field">
+                                    <label htmlFor="a-rate"><IndianRupee size={14} /> Rate (₹/g)</label>
+                                    <input id="a-rate" type="number" step="0.01" min="0" value={form.rate} onChange={e => up('rate', e.target.value)} placeholder="13040" />
+                                </div>
+                            </div>
+                            {amt > 0 && rt > 0 && (
+                                <div className="dealers-pure-calc">
+                                    <span>Pure Equivalent:</span>
+                                    <strong>{pureWeight.toFixed(3)} g</strong>
+                                    <small>(₹{form.amount} ÷ ₹{form.rate}/g)</small>
+                                </div>
+                            )}
+                        </>
                     )}
+
+                    <div className="expenses-field">
+                        <label htmlFor="g-note"><FileText size={14} /> Particulars (Note)</label>
+                        <input id="g-note" type="text" value={form.note} onChange={e => up('note', e.target.value)} placeholder={calcType === 'weight' ? "e.g., Drops, ring" : "e.g., Cash, GPay"} />
+                    </div>
 
                     <div className="expenses-field">
                         <label htmlFor="g-date"><Calendar size={14} /> Date</label>
@@ -201,7 +261,14 @@ const DealerLedger = () => {
                     <tbody>
                         {txns.length > 0 ? txns.reverse().map((txn) => {
                             const pure = purify(txn);
-                            const formulaStr = txn.rate > 0 && txn.weight > 0 ? `₹${(txn.rate * txn.weight).toFixed(0)} ÷ ₹${txn.rate}/g` : `${txn.weight.toFixed(3)}g × ${txn.purity}%`;
+                            let formulaStr = '';
+                            if (txn.calcType === 'amount') {
+                                formulaStr = `₹${(txn.amount || 0).toFixed(0)} ÷ ₹${txn.rate}/g`;
+                            } else if (txn.rate > 0 && txn.weight > 0 && !txn.calcType) { // Fallback for old records
+                                formulaStr = `₹${(txn.rate * txn.weight).toFixed(0)} ÷ ₹${txn.rate}/g`;
+                            } else {
+                                formulaStr = `${(txn.weight || 0).toFixed(3)}g × ${txn.purity}%`;
+                            }
 
                             return (
                                 <tr key={txn.id} className={txn.type === 'received' ? 'dealers-txn--in' : 'dealers-txn--out'}>
